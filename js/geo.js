@@ -1,7 +1,13 @@
 var miapp = {
-	control:"",
-    mapa:"",    // para el objeto google map
-    marcador:"",  // para el objeto marker de google map  
+	control:null,
+    geo:null,    // para el objeto geolocation
+    mapa:null,    // para el objeto google map
+    marcador:null,  // para el objeto marker de google map  
+
+    // opciones de posición
+    MAXIMUM_AGE: 200, // milisegundos
+    TIMEOUT: 300000,
+    HIGHACCURACY: true,
 
     // opciones de posición
     MAXIMUM_AGE: 200, // milisegundos
@@ -24,16 +30,37 @@ var miapp = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        	//Obtengo la ubicación del dispositivo, cada vez que el dispositiov cambia(watchPosition)
+        //Si el navegador soporta geolocalización ejecuto damePosicion()
+		if((miapp.geo = miapp.dameGeoLocalizacion())) {
+        	miapp.damePosicion();
+        } else {
+           alert('Tu navegador no soporta geolocalización');
+        }
+    },
+    
+    //Compruebo que el navegador soporta geolocalización
+    dameGeoLocalizacion: function() {
+		try {
+        	if( !! navigator.geolocation ) return navigator.geolocation;
+            else return undefined;
+        } 
+        catch(e) {
+          	return undefined;
+       }
+    },
+    
+   //Esta función se ejecuta una vez que se comprueba que el navegador soporta geolocation.
+    damePosicion: function() {
+    	//Obtengo la ubicación del dispositivo, cada vez que el dispositiov cambia(watchPosition)
     	//Cada 200mls. se ejecutará mostrarMapa(), si al cabo de este tiempo no se obtiene información se ejecuta errores()
-            miapp.control = navigator.geolocation.watchPosition(miapp.mostrarMapa, miapp.errores, {
+            miapp.control = miapp.geo.watchPosition(miapp.mostrarMapa, miapp.errores, {
                 enableHighAccuracy: miapp.HIGHACCURACY,
                 maximumAge: miapp.MAXIMUM_AGE,
                 timeout: miapp.TIMEOUT
             });
-    },
-    
-    //Esta función muestra el mapa de google con los datos que se le mandan cada 20mls.
+      },
+	
+	//Esta función muestra el mapa de google con los datos que se le mandan cada 20mls.
     mostrarMapa: function(position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
@@ -63,7 +90,7 @@ var miapp = {
                 miapp.marcador.setMap(miapp.mapa);
             }
         },
-        //Esta función se ejecuta si falla el envío de información mediante watchPosition
+	//Esta función se ejecuta si falla el envío de información mediante watchPosition
     errores: function(error) {
            miapp.cancelaPosicion();
             switch(error.code) {
@@ -82,7 +109,7 @@ var miapp = {
        },
 	//Esta función cancela watchPosition
     cancelaPosicion: function() {
-            if(miapp.control) navigator.geolocation.clearWatch(miapp.control);
+            if(miapp.control) miapp.geo.clearWatch(miapp.control);
             miapp.control = null;
        }	
 

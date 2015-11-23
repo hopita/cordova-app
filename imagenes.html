@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/mystyles.css">
+        <title>Imágenes</title>
+    </head>
+  <body>
+    <header class="clearfix navbar navbar-fixed-top navbar-inverse">
+    	<h1 class="text-center">Administración Imágenes</h1>
+	    <div class="container-fluid">
+		    <ul class="nav navbar nav-justified">
+		    	<!--Los iconos se muestran solo en dispositivos pequeños, entonces se esconde el texto-->
+			    <li><a href="index.html"><span class="glyphicon glyphicon-home visible-xs" aria-hidden="true"></span><span class=" hidden-xs">home</span></a></li>
+			    <li class="active"><a href="#"><span class="glyphicon glyphicon-picture visible-xs" aria-hidden="true"></span><span class=" hidden-xs">imágenes</span></a></li>
+			    <li><a href="camara.html"><span class="glyphicon glyphicon-camera visible-xs" aria-hidden="true"></span><span class=" hidden-xs">cámara</span></a></li>
+			    <li><a href="localizacion.html"><span class="glyphicon glyphicon-globe visible-xs" aria-hidden="true"></span><span class=" hidden-xs">localización</span></a></li>			    
+		    </ul>		    
+	    </div>
+    </header>
+	<main>
+		<div class="container-fluid">
+			<!--Ventana modal con el formulario de altas, esta ventana se abre cuando se hace click en el botón con id "alta" -->
+			<div class="modal fade" id="altaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				     <div class="modal-dialog">
+				        <div class="modal-content">
+					        <div class="modal-body">
+								<form name="formulario" enctype="multipart/form-data">
+									<div class="form-group">
+										<label for="titulo">Título: </label><br>
+										<input type="text" name="titulo" id="titulo">
+									</div>
+									<div class="form-group">
+										<label for="descripcion">Descripción: </label><br>
+										<textarea type="text" name="descripcion" id="descripcion"></textarea>
+									</div>
+									<div class="form-group">
+										<label for="archivoimagen">Imagen*: </label><br>
+										<input type="file" name="archivoimagen" id="archivoimagen">
+									</div>	
+									<!-- Elemento donde voy a mostrar un mensaje de aviso si se selecciona un archivo que no sea una imagen-->
+									<div id="alerta"></div>
+									<!--Este botón está inactivo hasta que se seleccione una imagen, que es el único dato obligatorio para dar el alta-->
+									<input type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Selecciona una imagen" id="grabar" value="Añadir" disabled="disabled">
+								</form>
+							</div>
+						    <div class="modal-footer">
+								<div class="col-md-2 pull-right">
+					               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					            </div>
+					        </div> 
+					    </div>
+				    </div>	
+				</div>
+				<!--fin altaModal-->
+				<!--Ventana modal con el formulario de modificaciones, esta ventana se abre cuando se hace click en el botón de modificación de la imagen en el listado de imágenes.-->
+				<div class="modal fade" id="modificacionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+					        <div class="modal-body">
+								<form name="formularioeditar" >
+									<input type="hidden" name="idrecord" id="idrecord" value="">
+									<div id="cajaimagen"></div>
+									<div class="form-group">
+										<label for="tituloeditar">Título: </label><br>
+										<input type="text" name="tituloeditar" id="tituloeditar">
+									</div>
+									<div class="form-group">
+										<label for="descripcioneditar">Descripción: </label><br>
+										<textarea type="text" name="descripcioneditar" id="descripcioneditar"></textarea>
+									</div>
+									<input type="button" class="btn btn-primary" id="grabareditar" value="Modificar">
+								</form>
+						</div>
+					       <div class="modal-footer">
+								<div class="col-md-2 pull-right">
+				                	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+				                </div>
+				            </div> 
+					    </div>
+				    </div>	
+				</div>
+				<!--fin modificacionModal-->
+				
+			<div id="botonaltas">
+				<!--Este botón lanza la ventana modal del formulario de altas-->
+				<button type='button' id="alta" data-toggle="modal" data-target="#altaModal">+</button>
+			</div>
+			<!--En este elemento se van a mostrar el listado de imágenes y el botón 'Eliminar todos' generados dinámicamente-->		
+			<section id="cajadatos">
+				No hay información disponible
+				
+			</section>
+		</div>	
+			
+			
+	</main>
+	<script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/imagenes.js"></script>
+  </body>
+</html>

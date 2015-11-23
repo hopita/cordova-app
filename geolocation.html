@@ -28,18 +28,47 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
+        <meta http-equiv="Content-Security-Policy"
+          content="default-src *;
+               script-src 'self' 'unsafe-inline' 'unsafe-eval'
+                           127.0.0.1:*
+                           http://*.google.com
+                           http://*.gstatic.com
+                           http://*.googleapis.com
+                           http://*.firebaseio.com
+                           https://*.google.com
+                           https://*.gstatic.com
+                           https://*.googleapis.com
+                           https://*.firebaseio.com
+                           ;
+               style-src  'self' 'unsafe-inline'
+                          127.0.0.1
+                           http://*.google.com
+                           http://*.gstatic.com
+                           http://*.googleapis.com
+                           http://*.firebaseio.com
+                           https://*.google.com
+                           https://*.gstatic.com
+                           https://*.googleapis.com
+                           https://*.firebaseio.com
+">
         <meta charset="utf-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="css/mystyles.css">
         <title>Geolocalización</title>
+        <style>
+        	html { height: 100%; }
+	        body { height: 100%;}
+	        main, .container-fluid{height: 95%;}
+        </style>
     </head>
-    <body>
+    <body id="geo">
 	<header class="clearfix navbar navbar-fixed-top navbar-inverse">
-		<h1 class="text-center">App Administración imágenes Bootstrap</h1>
+		<h1 class="text-center">Administración imágenes</h1>
 	    <div class="container-fluid">
 		    <ul class="nav navbar nav-justified">
 			    <li><a href="index.html"><span class="glyphicon glyphicon-home visible-xs" aria-hidden="true"></span><span class=" hidden-xs">home</span></a></li>
@@ -50,11 +79,14 @@
 	    </div>
     </header>
     <main>
-    	<div class="container-fluid">
+    	<div id="contenedor" class="container-fluid">
     		<div id="mapa"></div>
     	</div>
-    </main>        <script type="text/javascript" src="cordova.js"></script>
+    </main>
+        <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/bootstrap.js"></script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
         <script type="text/javascript" src="js/geo.js"></script>
     </body>
 </html>
+

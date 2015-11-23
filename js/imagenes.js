@@ -17,9 +17,23 @@ var miapp = {
 	//variable para almacenar la referencia al elemento alerta del formulario de altas
 	mialerta:"",
 	
-	iniciar: function(){
-		
-		//Almaceno las referencias al titulo y la descripción del formulario de alta
+	// Application Constructor
+    initialize: function() {
+        this.bindEvents();
+    },
+    // Bind Event Listeners
+    //
+    // Bind any events that are required on startup. Common events are:
+    // 'load', 'deviceready', 'offline', and 'online'.
+    bindEvents: function() {
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicitly call 'app.receivedEvent(...);'
+    onDeviceReady: function() {
+        //Almaceno las referencias al titulo y la descripción del formulario de alta
 		miapp.mititulo = document.getElementById('titulo');
 		miapp.midescripcion = document.getElementById('descripcion');
 		
@@ -29,25 +43,24 @@ var miapp = {
 		
 		/* Almaceno la referencia al elemento type file de formulario y le registro un detector para el evento 'onchange'*/
 		miapp.miarchivo = document.getElementById('archivoimagen');
-		miapp.miarchivo.addEventListener('change', this.procesarfile);
+		miapp.miarchivo.addEventListener('change', miapp.procesarfile);
 		
 		/* Almaceno la referencia al elemento type button con id grabar de formulario y le registro un detector para el evento 'onclick'*/
 		miapp.mibotongrabar = document.getElementById('grabar');
-		miapp.mibotongrabar.addEventListener('click', this.nuevoitem);
+		miapp.mibotongrabar.addEventListener('click', miapp.nuevoitem);
 		
 		/* Almaceno la referencia al elemento type button con id grabareditar de formularioeditar y le registro un detector para el evento 'onclick'*/
 		var botoneditar = document.getElementById('grabareditar');
-		botoneditar.addEventListener('click', this.modificaritem);
+		botoneditar.addEventListener('click', miapp.modificaritem);
 		
 		//El evento hide.bs.modal se lanza cuando la ventana(en este caso de alta) se cierra.
 		$('#altaModal').on('hidden.bs.modal',miapp.resetformalta);
 		
 		/* Ejecuto la función mostrar()*/
 		if (localStorage.length > 0){
-			this.mostrar();
-		}
-
-	},
+			miapp.mostrar();
+		}		
+    },
 	
 	/*
 	* Si el archivo no es una imagen, creo una referencia al elemento alerta e inserto el texto de aviso y le asigno la clase text-danger para mostralo con el texto en rojo
@@ -97,10 +110,7 @@ var miapp = {
 		 */
 		var archivo = archivos[0];
 		
-		/*
-		 * Comprobamos que el archivo seleccionado es una imagen
-		 */
-		if (archivo.type == "image/png" || archivo.type == "image/jpg" || archivo.type == "image/jpeg") {
+		
 			
 			// Elimino la alerta, si existiese
 			miapp.resetalerta();
@@ -122,15 +132,7 @@ var miapp = {
 			 */
 			lector.readAsDataURL(archivo);
 		
-		}else 	{
-			//Si el archivo no es una imagen 
-			
-			//Muestro un aviso
-			miapp.mostraralerta();
-			
-			//Desactivo el botón de grabación del formulario de altas
-			miapp.mibotongrabar.setAttribute("disabled", "disabled");
-		}
+
 	},
 	
 	// Esta función ejecuta el código para hacer altas de nuevas imágenes
@@ -277,5 +279,4 @@ var miapp = {
 	}
 	
 };
-//Registramos un detector para el evento onload al objeto Document, para que cuando se haya cargado la página ejecute iniciar()
-addEventListener('load', function(){miapp.iniciar();});
+miapp.initialize();
