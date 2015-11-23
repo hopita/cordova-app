@@ -28,22 +28,77 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
+        <meta charset="utf-8">
         <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/mystyles.css">
         <title>Hello World</title>
     </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
+    <body id="home">
+    <header class="clearfix navbar navbar-fixed-top navbar-inverse">    	
+            <h1 class="text-center">App Administración imágenes Bootstrap</h1>
+
+	    <div class="container-fluid">
+		    <ul class="nav navbar nav-justified">
+		    	<!--Los iconos se muestran solo en dispositivos pequeños, entonces se esconde el texto-->
+			    <li class="active"><a href="#"><span class="glyphicon glyphicon-home visible-xs" aria-hidden="true"></span><span class=" hidden-xs">home</span></a></li>
+			    <li><a href="imagenes.html"><span class="glyphicon glyphicon-picture visible-xs" aria-hidden="true"></span><span class=" hidden-xs">imágenes</span></a></li>
+			    <li><a href="camara.html"><span class="glyphicon glyphicon-camera visible-xs" aria-hidden="true"></span><span class=" hidden-xs">cámara</span></a></li>
+			    <li><a href="geolocation.html"><span class="glyphicon glyphicon-globe visible-xs" aria-hidden="true"></span><span class=" hidden-xs">localización</span></a></li>
+		    </ul>
+	    </div>
+    </header>
+	<main>
+		<section class="container-fluid">
+			 <div class="row content">
+			 	<!--En este elemento muestro el listado de imágenes generado dinámicamente-->
+			    <div id ="cajadatos" class="col-lg-12">
+			    			       
+			    </div>
+			</div>
+			<!--Ventana modal que carga una imagen, con botones para navegar entre las imágenes similar a un carrusel. 
+				Se abre al clickar una imagen. La imagen se carga dinámicamente, al hacer click en una imagen del listado.-->
+			<div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			    <div class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-body">
+			                <img id="image-gallery-image" class="img-responsive" src="">
+			                <button type="button" class="btn btn-default left carousel-control" id="imagen-anterior"> <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+			                <button type="button" id="imagen-siguiente" class="btn btn-default right carousel-control"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+			            </div>
+			            <div class="modal-footer">
+							<h4 class="modal-title text-center" id="image-gallery-title"></h4>
+							<div class="text-justify" id="image-gallery-caption">
+			                    
+			                </div>
+			                <div class="col-md-2 pull-right">
+			                	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			<!-- fin image-gallery-->
+		</section>
+	</main>
+	<!--contenedor de los selectores de efectos-->
+	<footer class="panel-footer navbar-inverse navbar-fixed-bottom">
+      <div class="container-fluid">
+      	<div id="efectos" class="row">
+      		<span class="glyphicon glyphicon-cog"></span>
+			<label class="radio-inline"><input type="radio" name="optradio" onclick="miapp.aplicarefecto(this.value)" value="">Ninguno</label>
+			<label class="radio-inline"><input type="radio" name="optradio" onclick="miapp.aplicarefecto(this.value)" value="sepia">Sepia</label>
+			<label class="radio-inline"><input type="radio" name="optradio" onclick="miapp.aplicarefecto(this.value)" value="blanconegro">Blanco/negro</label>
+			<label class="radio-inline"><input type="radio" name="optradio" onclick="miapp.aplicarefecto(this.value)" value="img-circle">Redondeado</label>
+		</div>
+      </div>
+    </footer>
+
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/bootstrap.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>
