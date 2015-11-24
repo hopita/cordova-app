@@ -1,19 +1,6 @@
 // JavaScript Document
 //Declaro objeto global
 var miapp = {
-	//variable que va a almacenar una referencia al elemento con id media
-	miVideo:"",
-	//Variable que va a almacenar una referencia al elemento con id foto
-	miFoto:"",
-	//Variable que va a almacenar los datos de la imagen
-	dataURL:"",
-	//Variable que va a almacenar una referencia al elemento con id canvas
-	micanvas:"",
-	//Variable que va a almacenar el contexto del lienzo
-	micontexto:"",
-	cameraAPIOptions: {},
-
-	
 	// Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -30,46 +17,74 @@ var miapp = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+    	
+    	document.getElementById('alerta').style.display = 'none';
+    	
+    	/* Almaceno la referencia al elemento type button con id grabareditar de formularioeditar y le registro un detector para el evento 'onclick'*/
+		var botoneditar = document.getElementById('grabareditar');
+		botoneditar.addEventListener('click', miapp.modificaritem);
         
-		
-		miapp.cameraAPIOptions.destinationType= 1;
-		navigator.camera.getPicture(miapp.onSuccess, miapp.onFail, miapp.cameraAPIOptions);		
+		navigator.camera.getPicture(miapp.onSuccess, miapp.onFail, { quality: 50,destinationType: Camera.DestinationType.FILE_URI });		
     },
-    
-	onFail: function(message) {
-			alert("Error getting picture/image: " + message);
-	},
 	
-	onSuccess: function(image){
-		
-		
-		alert("This is the NATIVE URI: " + image);
-		miapp.dataURL = image;
-
-		
+	onSuccess: function(image){		
 		/*
 			 * El método getTime() me devuelde el número de mm desde 1970/01/01
 			 * Lo voy a utilizar, junto con el string "img_" para generar una clave para el elemento que voy a almacenar
 			 */ 
 		var currentDate = new Date();
 		var time = currentDate.getTime();
-		var key = "img_" + time;
-		var img_id= key;
+		var key = time;
 		//Almaceno en  un objeto todos los datos del item a grabar
 		var img_datos = {
 		    titulo: "",
 		    descripcion: "",
-		    imagen: miapp.dataURL		
+		    imagen: image		
 		};
 		
 		/*
-			 * Con el método JSON.stringify() convierto el objeto javascript a una cadena JSON
-			 * Y llamo al método setItem() para crear un item
-			 */
-		localStorage.setItem(img_id, JSON.stringify(img_datos));
+		* Con el método JSON.stringify() convierto el objeto javascript a una cadena JSON
+		* Y llamo al método setItem() para crear un item
+		*/
+		localStorage.setItem(key, JSON.stringify(img_datos));
 		//para 2 $('#deviceImage').prop('src', miapp.dataURL);
-		$('#deviceImage').prop('src', "data:image/jpeg;base64," + image);
-
+		$('#deviceImage').prop('src', image);
+		var id=document.getElementById('idrecord');
+		//Asigno estos datos a los campos del formulario para mostrarlos
+		id.value =key;
+		
+	},
+	
+	//Esta función se ejecuta al hacer click en el botón Modificar de formularioeditar
+    modificaritem: function(){
+		//Almaceno en variables el contenido de los campos id y datos de la imagen del item a modificar del formulario formularioeditar
+		//En el elemento idrecord he almacenado el id del item a modificar
+		var id = document.getElementById('idrecord').value;		
+		var imagensrc = document.getElementById('deviceImage').src;
+		//Almaceno las referencias al titulo y la descripción del formulario de modificación
+		var mitituloeditar = document.getElementById('tituloeditar');
+		var midescripcioneditar = document.getElementById('descripcioneditar');
+		
+		//Almaceno en  un objeto todos los datos del item a modificar
+		var miimg_datos = {
+		    titulo: mitituloeditar.value,
+		    descripcion: midescripcioneditar.value,
+		    imagen: imagensrc		
+		};
+		
+		/*
+		* Con el método JSON.stringify() convierto el objeto javascript a una cadena JSON
+		* Y llamo al método set.Item() para actualizar el item
+		*/
+		localStorage.setItem(id, JSON.stringify(miimg_datos));
+		
+		mitituloeditar.value = "";
+		midescripcioneditar.value = "";
+		document.getElementById('alerta').style.display = 'block';
+	},
+	
+	onFail: function(message) {
+	    alert('Failed because: ' + message);
 	}
 			
 	};

@@ -38,26 +38,43 @@
         <title>Cámara</title>
 
     </head>
-  <body>
+  <body id="camera">
     <header class="clearfix navbar navbar-fixed-top navbar-inverse">
-    	<h1 class="text-center">App Administración imágenes Bootstrap</h1>
+    	<h1 class="text-center">Administración Imágenes</h1>
 	    <div class="container-fluid">
 		    <ul class="nav navbar nav-justified">
 		    	<!--Los iconos se muestran solo en dispositivos pequeños, entonces se esconde el texto-->
 			    <li><a href="index.html"><span class="glyphicon glyphicon-home visible-xs" aria-hidden="true"></span><span class=" hidden-xs">home</span></a></li>
 			    <li><a href="imagenes.html"><span class="glyphicon glyphicon-picture visible-xs" aria-hidden="true"></span><span class=" hidden-xs">imágenes</span></a></li>
-			    <li class="active"><a href="#"><span class="glyphicon glyphicon-camera visible-xs" aria-hidden="true"></span><span class=" hidden-xs">cámara</span></a></li>
+			    <li class="active"><a href="camara.html"><span class="glyphicon glyphicon-camera visible-xs" aria-hidden="true"></span><span class=" hidden-xs">cámara</span></a></li>
 			    <li><a href="localizacion.html"><span class="glyphicon glyphicon-globe visible-xs" aria-hidden="true"></span><span class=" hidden-xs">localización</span></a></li>
 		    </ul>
 	    </div>
     </header>
 	<main>
+		<div class="container-fluid">
+		<div class="center-block">
+		<img id="deviceImage">
+		</div>
 		
 		<div class="center-block">
-		<img height="250px" id="deviceImage" width="250px">
+		<form name="formularioeditar" >
+			<input type="hidden" name="idrecord" id="idrecord" value="">
+			<div id="cajaimagen"></div>
+			<div class="form-group">
+			<label for="tituloeditar">Título: </label><br>
+			<input type="text" name="tituloeditar" id="tituloeditar">
+			</div>
+			<div class="form-group">
+				<label for="descripcioneditar">Descripción: </label><br>
+				<textarea type="text" name="descripcioneditar" id="descripcioneditar"></textarea>
+			</div>
+			<button type="button" class="btn btn-primary" id="grabareditar">Modificar</button>
+		</form><br/>
+		<div id="alerta" class="alert alert-success esconder" role="alert">Los datos se han grabado con éxito</div>					
 		</div>
 			
-			
+		</div>	
 	</main>
 	<script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>

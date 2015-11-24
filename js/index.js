@@ -20,6 +20,7 @@ var miapp = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+		
         if (!miapp.hayImagenes()) miapp.resetapp();
 		miapp.mostrar();		
     },
@@ -147,27 +148,23 @@ var miapp = {
     // Esta función se ejecuta cuando se entra por primera vez a la app 
     //o bien no hay ninguna imagen en localstorage (porque se han eliminado todas la imágenes) y almacena 2 imágenes de ejemplo
 	resetapp: function(){
-		var arrayImagenesMuestra=['images/foto4.jpg', 'images/beate.jpg', 'images/chupachup.jpg', 'images/foto1.jpg', 'images/pragalomo.jpg', 'images/foto3.jpg', 'images/foto22.jpg', 'images/pl.jpg'];	
-		console.log(arrayImagenesMuestra.length);	
-		
+		var arrayImagenesMuestra=['foto4.jpg', 'beate.jpg', 'chupachup.jpg', 'foto1.jpg', 'pragalomo.jpg', 'foto3.jpg', 'foto22.jpg', 'pl.jpg'];	
 		var datos;
-			
-			for (var f = 0; f < arrayImagenesMuestra.length; f++){
-				
-				var key = "img_" + f;
-				var id= key;
-				//Almaceno en  un objeto todos los datos del item a grabar
-			     datos = {
-				    titulo: "imagen muestra" + f,
-				    descripcion: "imagen muestra" + f + ". Lorem fistrum pecador hasta luego Lucas tiene musho peligro diodenoo condemor mamaar te va a hasé pupitaa pupita mamaar. ",
-				    imagen: arrayImagenesMuestra[f]			
-				};
-				/*
-				 * Con el método JSON.stringify() convierto el objeto javascript a una cadena JSON
-				 * Y llamo al método setItem() para crear un item
-				 */
-				localStorage.setItem(id, JSON.stringify(datos));
-			}
+		for (var f = 0; f < arrayImagenesMuestra.length; f++){
+			var key = f;
+			var id= key;
+			//Almaceno en  un objeto todos los datos del item a grabar
+			datos = {
+				titulo: "imagen muestra" + f,
+				descripcion: "imagen muestra" + f + ". Lorem fistrum pecador hasta luego Lucas tiene musho peligro diodenoo condemor mamaar te va a hasé pupitaa pupita mamaar. ",
+				imagen: arrayImagenesMuestra[f]			
+			};
+			/*
+			* Con el método JSON.stringify() convierto el objeto javascript a una cadena JSON
+			* Y llamo al método setItem() para crear un item
+			*/
+			localStorage.setItem(id, JSON.stringify(datos));
+		}
 	},
     
     //Esta función genera el html que pinta el listado de miniaturas en la pantalla.
@@ -182,14 +179,13 @@ var miapp = {
 			var clave = localStorage.key(f);
 			
 			//Me aseguro de que el item que voy a almacenar es una imagen (las he grabado con prefijo "img_")
-			var n = clave.indexOf("img_");
-			if (n>-1){
+			
 				var valor = localStorage.getItem(clave);
 				var datos = JSON.parse(valor);
 				
 			
 				texto += '<div class="col-lg-3 col-md-4 col-xs-6 thumb"><a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="' +  datos.titulo + '" data-caption="' +  datos.descripcion + '" data-image="' + datos.imagen  + '" data-target="#image-gallery"><img class="imglistado" src="' + datos.imagen  + '" alt="Short alt text"></a></div>';
-			}
+			
 		}
 		//Pinto el listado en patalla
 		cajadatos.innerHTML = texto;
@@ -202,6 +198,16 @@ var miapp = {
 		 * Le paso como parámetro el elemento al que al hacer onclick carga la imagen en la ventana modal
 		 */
 		miapp.cargargaleria('');
+		
+		
+		var mibotonesradio = document.getElementsByName("optradio");
+		
+		for (var i = 0; i < mibotonesradio.length; i++) {
+    		mibotonesradio[i].addEventListener('click',function(e){ 
+		    	miapp.aplicarefecto(this.value); //And create a function that handles this.		    	
+			});		
+    		
+		}
 		
 		//guardo en la variable miefecto el efecto actualmente aplicado
 		miapp.miefecto =sessionStorage.getItem('efecto');

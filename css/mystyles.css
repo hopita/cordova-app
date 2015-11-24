@@ -121,3 +121,7 @@ body{
 #cajaimagen{
 	margin-bottom:10px;
 }
+
+#camera #deviceImage{
+	width:50%;
+}
