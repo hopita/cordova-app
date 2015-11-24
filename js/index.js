@@ -1,8 +1,9 @@
 //Declaro objeto global
 var miapp = {
 	//Variable donde almaceno el efecto actual
-	miefecto:"",	
-	
+	miefecto:"",
+	theFileSystem:null,	
+	theEntries:null,
 	// Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -171,10 +172,7 @@ var miapp = {
     
     //Esta función genera el html que pinta el listado de miniaturas en la pantalla.
     mostrar: function(){
-    	console.log(cordova.file.applicationDirectory);
-    	console.log("cordova.file.dataDirectory " + cordova.file.dataDirectory );
-    	console.log("cordova.file.applicationStorageDirectory " + cordova.file.applicationStorageDirectory );
-		var cajadatos = document.getElementById('cajadatos');
+    			var cajadatos = document.getElementById('cajadatos');
 		
 		var texto ="";
 	
@@ -190,7 +188,7 @@ var miapp = {
 				var datos = JSON.parse(valor);
 				
 			
-				texto += '<div class="col-lg-3 col-md-4 col-xs-6 thumb"><a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="' +  datos.titulo + '" data-caption="' +  datos.descripcion + '" data-image="' + datos.imagen  + '" data-target="#image-gallery"><img class="imglistado" src="' + cordova.file.applicationDirectory + datos.imagen  + '" alt="Short alt text"></a></div>';
+				texto += '<div class="col-lg-3 col-md-4 col-xs-6 thumb"><a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="' +  datos.titulo + '" data-caption="' +  datos.descripcion + '" data-image="' + datos.imagen  + '" data-target="#image-gallery"><img class="imglistado" src="' + datos.imagen  + '" alt="Short alt text"></a></div>';
 			}
 		}
 		//Pinto el listado en patalla
