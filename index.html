@@ -84,6 +84,20 @@
 			</div>
 			<!-- fin image-gallery-->
 		</section>
+		<section id="dirList" data-role="page" data-add-back-btn="true">
+  <header data-role="header">
+    <h1>File API Demo</h1>
+    <a onclick="writeFile();" data-icon="plus" 
+      class="ui-btn-right">Write</a>
+  </header>
+  <div data-role="content">
+    <p> File System Contents</p>
+    <ul data-role="listview" id="dirEntryList"></ul>
+  </div>
+  <div data-role="footer" data-id="foot_main" data-position="fixed">
+    <h4>www.cordovacookbook.com</h4>
+  </div>
+</section>
 	</main>
 	<!--contenedor de los selectores de efectos-->
 	<footer class="panel-footer navbar-inverse navbar-fixed-bottom">
