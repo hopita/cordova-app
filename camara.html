@@ -46,33 +46,47 @@
 		    	<!--Los iconos se muestran solo en dispositivos pequeños, entonces se esconde el texto-->
 			    <li><a href="index.html"><span class="glyphicon glyphicon-home visible-xs" aria-hidden="true"></span><span class=" hidden-xs">home</span></a></li>
 			    <li><a href="imagenes.html"><span class="glyphicon glyphicon-picture visible-xs" aria-hidden="true"></span><span class=" hidden-xs">imágenes</span></a></li>
-			    <li class="active"><a href="camara.html"><span class="glyphicon glyphicon-camera visible-xs" aria-hidden="true"></span><span class=" hidden-xs">cámara</span></a></li>
-			    <li><a href="localizacion.html"><span class="glyphicon glyphicon-globe visible-xs" aria-hidden="true"></span><span class=" hidden-xs">localización</span></a></li>
+			    <li class="active"><a href="#"><span class="glyphicon glyphicon-camera visible-xs" aria-hidden="true"></span><span class=" hidden-xs">cámara</span></a></li>
+			    <li><a href="geolocation.html"><span class="glyphicon glyphicon-globe visible-xs" aria-hidden="true"></span><span class=" hidden-xs">localización</span></a></li>
 		    </ul>
 	    </div>
     </header>
 	<main>
 		<div class="container-fluid">
-		<div class="center-block">
-		<img id="deviceImage">
-		</div>
-		
-		<div class="center-block">
-		<form name="formularioeditar" >
-			<input type="hidden" name="idrecord" id="idrecord" value="">
-			<div id="cajaimagen"></div>
-			<div class="form-group">
-			<label for="tituloeditar">Título: </label><br>
-			<input type="text" name="tituloeditar" id="tituloeditar">
-			</div>
-			<div class="form-group">
-				<label for="descripcioneditar">Descripción: </label><br>
-				<textarea type="text" name="descripcioneditar" id="descripcioneditar"></textarea>
-			</div>
-			<button type="button" class="btn btn-primary" id="grabareditar">Modificar</button>
-		</form><br/>
-		<div id="alerta" class="alert alert-success esconder" role="alert">Los datos se han grabado con éxito</div>					
-		</div>
+			<!--Ventana modal con el formulario de modificaciones, esta ventana se abre cuando se hace una foto-->
+				<div class="modal fade" id="modificacionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+					        <div class="modal-body">
+								<form name="formularioeditar" >
+									<input type="hidden" name="idrecord" id="idrecord" value="">
+									<img class="img-responsive" id="deviceImage">
+									<div class="form-group">
+										<label for="tituloeditar">Título: </label><br>
+										<input type="text" name="tituloeditar" id="tituloeditar">
+									</div>
+									<div class="form-group">
+										<label for="descripcioneditar">Descripción: </label><br>
+										<textarea type="text" name="descripcioneditar" id="descripcioneditar"></textarea>
+									</div>
+									<input type="button" class="btn btn-primary" id="grabareditar" value="Modificar">
+								</form>
+						</div>
+					       <div class="modal-footer">
+								<div class="col-md-2 pull-right">
+				                	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+				                </div>
+				            </div> 
+					    </div>
+				    </div>	
+				</div>
+				<!--fin modificacionModal-->
+				
+			<div class="row">
+    			<div class="col-xs-offset-4 col-xs-4">
+    				<button type="button" class="btn btn-primary" id="hacerfoto"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span></button>
+    			</div>
+  		</div>
 			
 		</div>	
 	</main>

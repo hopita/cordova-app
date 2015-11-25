@@ -122,6 +122,14 @@ body{
 	margin-bottom:10px;
 }
 
-#camera #deviceImage{
-	width:50%;
+#eliminartodos{
+	width:100%;
+}
+#hacerfoto{
+	font-size:7em;
+}
+
+.radio-inline{
+padding-left: 9px;
+
 }

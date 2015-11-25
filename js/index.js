@@ -2,8 +2,6 @@
 var miapp = {
 	//Variable donde almaceno el efecto actual
 	miefecto:"",
-	theFileSystem:null,	
-	theEntries:null,
 	// Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -21,6 +19,7 @@ var miapp = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
 		
+		//Si no hay imágenes se cargan las de muestra
         if (!miapp.hayImagenes()) miapp.resetapp();
 		miapp.mostrar();		
     },
@@ -148,7 +147,7 @@ var miapp = {
     // Esta función se ejecuta cuando se entra por primera vez a la app 
     //o bien no hay ninguna imagen en localstorage (porque se han eliminado todas la imágenes) y almacena 2 imágenes de ejemplo
 	resetapp: function(){
-		var arrayImagenesMuestra=['foto4.jpg', 'beate.jpg', 'chupachup.jpg', 'foto1.jpg', 'pragalomo.jpg', 'foto3.jpg', 'foto22.jpg', 'pl.jpg'];	
+		var arrayImagenesMuestra=['img/foto4.jpg', 'img/beate.jpg', 'img/chupachup.jpg', 'img/foto1.jpg', 'img/pragalomo.jpg', 'img/foto3.jpg', 'img/foto22.jpg', 'img/pl.jpg'];	
 		var datos;
 		for (var f = 0; f < arrayImagenesMuestra.length; f++){
 			var key = f;
@@ -169,22 +168,17 @@ var miapp = {
     
     //Esta función genera el html que pinta el listado de miniaturas en la pantalla.
     mostrar: function(){
-    			var cajadatos = document.getElementById('cajadatos');
-		
+    	var cajadatos = document.getElementById('cajadatos');
 		var texto ="";
-	
 		cajadatos.innerHTML = "";
 		//En este bucle recupero los items y los almaceno en la variable texto
 		for (var f = 0; f < localStorage.length; f++){
 			var clave = localStorage.key(f);
 			
 			//Me aseguro de que el item que voy a almacenar es una imagen (las he grabado con prefijo "img_")
-			
-				var valor = localStorage.getItem(clave);
-				var datos = JSON.parse(valor);
-				
-			
-				texto += '<div class="col-lg-3 col-md-4 col-xs-6 thumb"><a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="' +  datos.titulo + '" data-caption="' +  datos.descripcion + '" data-image="' + datos.imagen  + '" data-target="#image-gallery"><img class="imglistado" src="' + datos.imagen  + '" alt="Short alt text"></a></div>';
+			var valor = localStorage.getItem(clave);
+			var datos = JSON.parse(valor);
+			texto += '<div class="col-lg-3 col-md-4 col-xs-6 thumb"><a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="' +  datos.titulo + '" data-caption="' +  datos.descripcion + '" data-image="' + datos.imagen  + '" data-target="#image-gallery"><img class="imglistado" src="' + datos.imagen  + '" alt="Short alt text"></a></div>';
 			
 		}
 		//Pinto el listado en patalla
@@ -205,8 +199,7 @@ var miapp = {
 		for (var i = 0; i < mibotonesradio.length; i++) {
     		mibotonesradio[i].addEventListener('click',function(e){ 
 		    	miapp.aplicarefecto(this.value); //And create a function that handles this.		    	
-			});		
-    		
+			});		    		
 		}
 		
 		//guardo en la variable miefecto el efecto actualmente aplicado
@@ -233,5 +226,6 @@ var miapp = {
 		if (numeroImagenes > 0) return true;
 		else return false;
 	}
+
 };
 miapp.initialize();

@@ -1,6 +1,7 @@
 // JavaScript Document
 //Declaro objeto global
 var miapp = {
+	botonhacerfoto:"",
 	// Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -18,16 +19,26 @@ var miapp = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
     	
-    	document.getElementById('alerta').style.display = 'none';
+    	/* Almaceno la referencia al elemento type button con id grabareditar de formularioeditar y le registro un detector para el evento 'onclick'*/
+		miapp.botonhacerfoto = document.getElementById('hacerfoto');
+		miapp.botonhacerfoto.addEventListener('click', miapp.hacerFoto);
     	
     	/* Almaceno la referencia al elemento type button con id grabareditar de formularioeditar y le registro un detector para el evento 'onclick'*/
 		var botoneditar = document.getElementById('grabareditar');
-		botoneditar.addEventListener('click', miapp.modificaritem);
-        
-		navigator.camera.getPicture(miapp.onSuccess, miapp.onFail, { quality: 50,destinationType: Camera.DestinationType.FILE_URI });		
+		botoneditar.addEventListener('click', miapp.modificaritem);				
+    },
+    
+    hacerFoto: function(){
+    	/*
+    	 *La función camera.getPicture abre la aplicación predeterminada de cámara del dispositivo que permite a los usuarios, tomar fotografías.
+    	 * Si hay exito ejecuta la función  onSuccess() y si falla onFail()
+    	 */
+    	navigator.camera.getPicture(miapp.onSuccess, miapp.onFail, { quality: 50,destinationType: Camera.DestinationType.FILE_URI });
     },
 	
-	onSuccess: function(image){		
+	
+	onSuccess: function(image){	
+		//Esta función se ejecuta si no ha habido problemas al tomar la fotografía y se le pasa los datosd e la imagen	
 		/*
 			 * El método getTime() me devuelde el número de mm desde 1970/01/01
 			 * Lo voy a utilizar, junto con el string "img_" para generar una clave para el elemento que voy a almacenar
@@ -50,8 +61,10 @@ var miapp = {
 		//para 2 $('#deviceImage').prop('src', miapp.dataURL);
 		$('#deviceImage').prop('src', image);
 		var id=document.getElementById('idrecord');
-		//Asigno estos datos a los campos del formulario para mostrarlos
+		//Asigno el id al campo del formulario para despues modificarlo
 		id.value =key;
+		//Cierro la ventana modal donde se encuentra el formulario de modificación
+		$('#modificacionModal').modal('show');
 		
 	},
 	
@@ -64,7 +77,7 @@ var miapp = {
 		//Almaceno las referencias al titulo y la descripción del formulario de modificación
 		var mitituloeditar = document.getElementById('tituloeditar');
 		var midescripcioneditar = document.getElementById('descripcioneditar');
-		
+	
 		//Almaceno en  un objeto todos los datos del item a modificar
 		var miimg_datos = {
 		    titulo: mitituloeditar.value,
@@ -80,7 +93,7 @@ var miapp = {
 		
 		mitituloeditar.value = "";
 		midescripcioneditar.value = "";
-		document.getElementById('alerta').style.display = 'block';
+		$('#modificacionModal').modal('hide');
 	},
 	
 	onFail: function(message) {

@@ -1,16 +1,8 @@
 //Declaro objeto global
 var miapp = {
-	/*Variable para almacenar los datos de la imagen*/
-	miimagen:"",
-	/* Variable para almacenar el objeto con los datos del item a almacenar o modificar*/
-	miimg_datos:"",
-	/*Variable para almacenar la referencia al botón de altas */
-	mibotongrabar:"",
 	mitituloeditar:"",
 	midescripcioneditar:"",	
-	
-	//variable para almacenar la referencia al elemento alerta del formulario de altas
-	mialerta:"",
+
 	// Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -27,7 +19,7 @@ var miapp = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-
+		/* Almaceno la referencia al elemento type button con id eliminartodos y le registro un detector para el evento 'onclick'*/
 		var mibotoneliminartodos = document.getElementById('eliminartodos');
 		mibotoneliminartodos.addEventListener('click', miapp.eliminarTodos);
 		
@@ -35,6 +27,7 @@ var miapp = {
 		miapp.mitituloeditar = document.getElementById('tituloeditar');
 		miapp.midescripcioneditar = document.getElementById('descripcioneditar');
 		
+		/* Almaceno la referencia al elemento type button con id alta y le registro un detector para el evento 'onclick'*/
 		var mibotonalta = document.getElementById('alta');
 		mibotonalta.addEventListener('click', miapp.seleccionaimagen);
 		
@@ -52,34 +45,57 @@ var miapp = {
     },
     
     seleccionaimagen: function(){		
-		navigator.camera.getPicture(miapp.onSuccess, miapp.onFail, { quality: 50,sourceType: Camera.PictureSourceType.PHOTOLIBRARY, destinationType: Camera.DestinationType.FILE_URI });
+    	/*
+    	 *La función camera.getPicture abre la aplicación predeterminada de cámara del dispositivo que permite a los usuarios, ene ste caso seleccionar una imagen del album de fotografías.
+    	 * Si hay exito ejecuta la función  onSuccess() y si falla onFail()
+    	 */
+		navigator.camera.getPicture(miapp.onSuccess, miapp.onFail, { quality: 50,sourceType: Camera.PictureSourceType.PHOTOLIBRARY, destinationType: Camera.DestinationType.FILE_URI, saveToPhotoAlbum: true });
 	},
 	
 	
-	//Esta función se ejecuta cuando no ha habido errores con la cámara
-	onSuccess: function(image){		
-		/*
+	//Esta función se ejecuta cuando no ha habido errores con la cámara y se le pasa como parámetro los datos de la fotografía.
+	onSuccess: function(image){	
+		/**
+		 * He tenido que utilizar el plugin FilePath para solucionar el problema de la ruta de archivos.
+		 * Con la opción Camera.PictureSourceType.PHOTOLIBRARY, el sistema no encontraba la ruta de las imágenes para mostrarlas.
+		 * Este plugin convierte la URI en formato content://... en una ruta completa
+		 */
+		window.FilePath.resolveNativePath(image, function(result) {
+		    // onSuccess code
+		    image = 'file://' + result;
+		    /*
 			 * El método getTime() me devuelde el número de mm desde 1970/01/01
 			 * Lo voy a utilizar, junto con el string "img_" para generar una clave para el elemento que voy a almacenar
 			 */ 
-		var currentDate = new Date();
-		var time = currentDate.getTime();
-		var key = time;
-		//Almaceno en  un objeto todos los datos del item a grabar
-		var img_datos = {
-		    titulo: "",
-		    descripcion: "",
-		    imagen: image		
-		};
+			
+		    var currentDate = new Date();
+			var time = currentDate.getTime();
+			var key = time;
+			//Almaceno en  un objeto todos los datos del item a grabar
+			var img_datos = {
+			    titulo: "",
+			    descripcion: "",
+			    imagen: image		
+			};
 		
-		/*
-			 * Con el método JSON.stringify() convierto el objeto javascript a una cadena JSON
-			 * Y llamo al método setItem() para crear un item
-			 */
-		localStorage.setItem(key, JSON.stringify(img_datos));
-		//para 2 $('#deviceImage').prop('src', miapp.dataURL);
-		miapp.dameitem(key);
-		$('#modificacionModal').modal('show');	
+			/*
+				 * Con el método JSON.stringify() convierto el objeto javascript a una cadena JSON
+				 * Y llamo al método setItem() para crear un item
+				 */
+			localStorage.setItem(key, JSON.stringify(img_datos));
+			
+			//Llamo a la función que me da los datos para mostrarlos en el formulario de modificación
+			miapp.dameitem(key);
+			
+			//Abro la ventana con el formulario de modificación
+			$('#modificacionModal').modal('show');
+		
+		  }, function (error) {
+		    console.log("Error en FilePath.resolveNativePath");
+		  });
+		
+			
+		
 
 	},
 
@@ -91,7 +107,7 @@ var miapp = {
 		var imagensrc = document.getElementById('deviceImage').src;
 		
 		//Almaceno en  un objeto todos los datos del item a modificar
-		miapp.miimg_datos = {
+		var miimg_datos = {
 		    titulo: miapp.mitituloeditar.value,
 		    descripcion: miapp.midescripcioneditar.value,
 		    imagen: imagensrc
@@ -102,7 +118,7 @@ var miapp = {
 		* Con el método JSON.stringify() convierto el objeto javascript a una cadena JSON
 		* Y llamo al método set.Item() para actualizar el item
 		*/
-		localStorage.setItem(id, JSON.stringify(miapp.miimg_datos));
+		localStorage.setItem(id, JSON.stringify(miimg_datos));
 		
 		//Cierro la ventana modal donde se encuentra el formulario de modificación
 		$('#modificacionModal').modal('hide');
@@ -128,8 +144,6 @@ var miapp = {
 		 * Llamo al método get.Item() para obtener el valor del item a modificar
 		* Con el método JSON.parse() analizo el string devuelto como JSON y lo almaceno en un objeto
 		*/
-		
-		
 		var valor = localStorage.getItem(clave);
 		var datos = JSON.parse(valor);
 		
@@ -157,6 +171,7 @@ var miapp = {
 			var valor = localStorage.getItem(clave);
 			var datos = JSON.parse(valor);
 			
+			
 			texto += '<li class="list-group-item"><div class="col-sm-2"><img  class="" src="' + datos.imagen  + '" ></div><div class="col-sm-10"><h2 class="h4">' +  datos.titulo + '</h2>' + datos.descripcion + '</div><div class="botones col-sm-10"><button type="button" data-id-imagen-modificar="'+ clave + '" class="modificar" data-toggle="modal" data-target="#modificacionModal"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button><button class="eliminar" data-id-imagen-eliminar="' + clave + '" type="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div></li>';
 			
 		}
@@ -166,13 +181,6 @@ var miapp = {
 		
 		/* Almaceno la referencia a los elementos type button con class modificar del listado de imágenes y les registro un detector para el evento 'onclick'*/
     	var mibotomodificar = document.getElementsByClassName('modificar');
-    	//var id_imagen_modificar = null;
-    	
-    	/*for (var i = 0; i < mibotomodificar.length; i++) {
-    		var id_imagen_modificar = mibotomodificar[i].getAttribute('data-id-imagen-modificar');
-    		mibotomodificar[i].addEventListener('click', miapp.dameitem(this));
-    		
-		}*/
 		
 		for (var i = 0; i < mibotomodificar.length; i++) {
     		mibotomodificar[i].addEventListener('click',function(e){ 
@@ -181,9 +189,7 @@ var miapp = {
 			});		
     		
 		}
-		
-			
-		
+
 		/* Almaceno la referencia a los elementos type button con class eliminar del listado de imágenes y les registro un detector para el evento 'onclick'*/
     	var mibotoeliminar = document.getElementsByClassName('eliminar');
     	for (var i = 0; i < mibotoeliminar.length; i++) {
