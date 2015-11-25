@@ -45,14 +45,18 @@ var miapp = {
     },
     
     seleccionaimagen: function(){		
+<<<<<<< HEAD
     	/*
     	 *La función camera.getPicture abre la aplicación predeterminada de cámara del dispositivo que permite a los usuarios, ene ste caso seleccionar una imagen del album de fotografías.
     	 * Si hay exito ejecuta la función  onSuccess() y si falla onFail()
     	 */
+=======
+>>>>>>> a598e3fa1685f21863a5ca2f72fe11a36e296a8a
 		navigator.camera.getPicture(miapp.onSuccess, miapp.onFail, { quality: 50,sourceType: Camera.PictureSourceType.PHOTOLIBRARY, destinationType: Camera.DestinationType.FILE_URI, saveToPhotoAlbum: true });
 	},
 	
 	
+<<<<<<< HEAD
 	//Esta función se ejecuta cuando no ha habido errores con la cámara y se le pasa como parámetro los datos de la fotografía.
 	onSuccess: function(image){	
 		/**
@@ -60,6 +64,11 @@ var miapp = {
 		 * Con la opción Camera.PictureSourceType.PHOTOLIBRARY, el sistema no encontraba la ruta de las imágenes para mostrarlas.
 		 * Este plugin convierte la URI en formato content://... en una ruta completa
 		 */
+=======
+	//Esta función se ejecuta cuando no ha habido errores con la cámara
+	onSuccess: function(image){	
+		//converts the URI in 'content://...' format into full file path
+>>>>>>> a598e3fa1685f21863a5ca2f72fe11a36e296a8a
 		window.FilePath.resolveNativePath(image, function(result) {
 		    // onSuccess code
 		    image = 'file://' + result;
@@ -69,6 +78,7 @@ var miapp = {
 			 */ 
 			
 		    var currentDate = new Date();
+<<<<<<< HEAD
 			var time = currentDate.getTime();
 			var key = time;
 			//Almaceno en  un objeto todos los datos del item a grabar
@@ -96,6 +106,32 @@ var miapp = {
 		
 			
 		
+=======
+		var time = currentDate.getTime();
+		var key = time;
+		//Almaceno en  un objeto todos los datos del item a grabar
+		var img_datos = {
+		    titulo: "",
+		    descripcion: "",
+		    imagen: image		
+		};
+		
+		/*
+			 * Con el método JSON.stringify() convierto el objeto javascript a una cadena JSON
+			 * Y llamo al método setItem() para crear un item
+			 */
+		localStorage.setItem(key, JSON.stringify(img_datos));
+		//para 2 $('#deviceImage').prop('src', miapp.dataURL);
+		miapp.dameitem(key);
+		$('#modificacionModal').modal('show');
+		
+		  }, function (error) {
+		    console.log("Error en FilePath.resolveNativePath");
+		  });
+		
+			
+		
+>>>>>>> a598e3fa1685f21863a5ca2f72fe11a36e296a8a
 
 	},
 
