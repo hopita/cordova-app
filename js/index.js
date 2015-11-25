@@ -148,7 +148,7 @@ var miapp = {
     // Esta función se ejecuta cuando se entra por primera vez a la app 
     //o bien no hay ninguna imagen en localstorage (porque se han eliminado todas la imágenes) y almacena 2 imágenes de ejemplo
 	resetapp: function(){
-		var arrayImagenesMuestra=['foto4.jpg', 'beate.jpg', 'chupachup.jpg', 'foto1.jpg', 'pragalomo.jpg', 'foto3.jpg', 'foto22.jpg', 'pl.jpg'];	
+		var arrayImagenesMuestra=['img/foto4.jpg', 'img/beate.jpg', 'img/chupachup.jpg', 'img/foto1.jpg', 'img/pragalomo.jpg', 'img/foto3.jpg', 'img/foto22.jpg', 'img/pl.jpg'];	
 		var datos;
 		for (var f = 0; f < arrayImagenesMuestra.length; f++){
 			var key = f;
@@ -233,5 +233,6 @@ var miapp = {
 		if (numeroImagenes > 0) return true;
 		else return false;
 	}
+
 };
 miapp.initialize();

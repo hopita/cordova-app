@@ -52,17 +52,22 @@ var miapp = {
     },
     
     seleccionaimagen: function(){		
-		navigator.camera.getPicture(miapp.onSuccess, miapp.onFail, { quality: 50,sourceType: Camera.PictureSourceType.PHOTOLIBRARY, destinationType: Camera.DestinationType.FILE_URI });
+		navigator.camera.getPicture(miapp.onSuccess, miapp.onFail, { quality: 50,sourceType: Camera.PictureSourceType.PHOTOLIBRARY, destinationType: Camera.DestinationType.FILE_URI, saveToPhotoAlbum: true });
 	},
 	
 	
 	//Esta función se ejecuta cuando no ha habido errores con la cámara
-	onSuccess: function(image){		
-		/*
+	onSuccess: function(image){	
+		//converts the URI in 'content://...' format into full file path
+		window.FilePath.resolveNativePath(image, function(result) {
+		    // onSuccess code
+		    image = 'file://' + result;
+		    /*
 			 * El método getTime() me devuelde el número de mm desde 1970/01/01
 			 * Lo voy a utilizar, junto con el string "img_" para generar una clave para el elemento que voy a almacenar
 			 */ 
-		var currentDate = new Date();
+			
+		    var currentDate = new Date();
 		var time = currentDate.getTime();
 		var key = time;
 		//Almaceno en  un objeto todos los datos del item a grabar
@@ -79,7 +84,14 @@ var miapp = {
 		localStorage.setItem(key, JSON.stringify(img_datos));
 		//para 2 $('#deviceImage').prop('src', miapp.dataURL);
 		miapp.dameitem(key);
-		$('#modificacionModal').modal('show');	
+		$('#modificacionModal').modal('show');
+		
+		  }, function (error) {
+		    console.log("Error en FilePath.resolveNativePath");
+		  });
+		
+			
+		
 
 	},
 
@@ -156,6 +168,7 @@ var miapp = {
 			var clave = localStorage.key(f);
 			var valor = localStorage.getItem(clave);
 			var datos = JSON.parse(valor);
+			
 			
 			texto += '<li class="list-group-item"><div class="col-sm-2"><img  class="" src="' + datos.imagen  + '" ></div><div class="col-sm-10"><h2 class="h4">' +  datos.titulo + '</h2>' + datos.descripcion + '</div><div class="botones col-sm-10"><button type="button" data-id-imagen-modificar="'+ clave + '" class="modificar" data-toggle="modal" data-target="#modificacionModal"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button><button class="eliminar" data-id-imagen-eliminar="' + clave + '" type="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div></li>';
 			
